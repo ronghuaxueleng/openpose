@@ -51,7 +51,8 @@ hand_colors = [(100., 100., 100.),
                (200, 0, 200), (255, 0, 255)]
 
 
-def handle_json(jsonfile):
+def handle_json(dir_path, filename):
+    jsonfile = os.path.join(dir_path, filename)
     print('hand json {}'.format(jsonfile))
     with open(jsonfile, 'r') as f:
         data = json.load(f)
@@ -99,16 +100,14 @@ def handle_json(jsonfile):
     if not os.path.exists('results'):
         os.makedirs('results')
     # 保存图片
-    cv2.imwrite('results/{}.jpg'.format(jsonfile.split("\\")[-1][0:-5]), img)
+    cv2.imwrite('{}/{}.jpg'.format(dir_path, filename), img)
 
 
 if __name__ == '__main__':
     root_path = 'jsons'
     json_dir_list = os.listdir(root_path)
     for json_dir in json_dir_list:
-        face_path = os.path.join(root_path, json_dir, 'face.json')
-        full_body_path = os.path.join(root_path, json_dir, 'full_body.json')
-        fix_full_body_path = os.path.join(root_path, json_dir, 'full_body_fix.json')
-        handle_json(face_path)
-        handle_json(full_body_path)
-        handle_json(fix_full_body_path)
+        sub_dir_path = os.path.join(root_path, json_dir)
+        handle_json(sub_dir_path, 'face.json')
+        handle_json(sub_dir_path, 'full_body.json')
+        handle_json(sub_dir_path, 'full_body_fix.json')
