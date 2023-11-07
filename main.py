@@ -58,8 +58,8 @@ def handle_json(jsonfile):
     # 纯黑色背景
     img = cv2.imread('black.jpg')
     for d in data['people']:
-        kpt = np.array(d['pose_keypoints_2d']).reshape((25, 3))
-        for p in pose_pairs:
+        kpt = np.array(d['pose_keypoints_2d']).reshape((-1, 3))
+        for p in pose_pairs[len(kpt)]:
             pt1 = tuple(list(map(int, kpt[p[0], 0:2])))
             c1 = kpt[p[0], 2]
             pt2 = tuple(list(map(int, kpt[p[1], 0:2])))
@@ -67,35 +67,35 @@ def handle_json(jsonfile):
             print('== {}, {}, {}, {} =='.format(pt1, c1, pt2, c2))
             if c1 == 0.0 or c2 == 0.0:
                 continue
-            color = tuple(list(map(int, pose_colors[p[0]])))
+            color = tuple(list(map(int, pose_colors[len(kpt)][p[0]])))
             img = cv2.line(img, pt1, pt2, color, thickness=4)
             img = cv2.circle(img, pt1, 4, color, thickness=-
             1, lineType=8, shift=0)
             img = cv2.circle(img, pt2, 4, color, thickness=-
             1, lineType=8, shift=0)
-        kpt_left_hand = np.array(d['hand_left_keypoints_2d']).reshape((21, 3))
-        for q in hand_pairs:
-            pt1 = tuple(list(map(int, kpt_left_hand[q[0], 0:2])))
-            c1 = kpt_left_hand[p[0], 2]
-            pt2 = tuple(list(map(int, kpt_left_hand[q[1], 0:2])))
-            c2 = kpt_left_hand[q[1], 2]
-            # print('** {}, {}, {}, {} **'.format(pt1, c1, pt2, c2))
-            if c1 == 0.0 or c2 == 0.0:
-                continue
-            color = tuple(list(map(int, hand_colors[q[0]])))
-            img = cv2.line(img, pt1, pt2, color, thickness=4)
-        kpt_right_hand = np.array(
-            d['hand_right_keypoints_2d']).reshape((21, 3))
-        for k in hand_pairs:
-            pt1 = tuple(list(map(int, kpt_right_hand[k[0], 0:2])))
-            c1 = kpt_right_hand[k[0], 2]
-            pt2 = tuple(list(map(int, kpt_right_hand[k[1], 0:2])))
-            c2 = kpt_right_hand[k[1], 2]
-            print('** {}, {}, {}, {} **'.format(pt1, c1, pt2, c2))
-            if c1 == 0.0 or c2 == 0.0:
-                continue
-            color = tuple(list(map(int, hand_colors[q[0]])))
-            img = cv2.line(img, pt1, pt2, color, thickness=4)
+        if 'hand_left_keypoints_2d' in d:
+            kpt_left_hand = np.array(d['hand_left_keypoints_2d']).reshape((21, 3))
+            for q in hand_pairs:
+                pt1 = tuple(list(map(int, kpt_left_hand[q[0], 0:2])))
+                c1 = kpt_left_hand[p[0], 2]
+                pt2 = tuple(list(map(int, kpt_left_hand[q[1], 0:2])))
+                c2 = kpt_left_hand[q[1], 2]
+                # print('** {}, {}, {}, {} **'.format(pt1, c1, pt2, c2))
+                if c1 == 0.0 or c2 == 0.0:
+                    continue
+                color = tuple(list(map(int, hand_colors[q[0]])))
+                img = cv2.line(img, pt1, pt2, color, thickness=4)
+            kpt_right_hand = np.array(d['hand_right_keypoints_2d']).reshape((21, 3))
+            for k in hand_pairs:
+                pt1 = tuple(list(map(int, kpt_right_hand[k[0], 0:2])))
+                c1 = kpt_right_hand[k[0], 2]
+                pt2 = tuple(list(map(int, kpt_right_hand[k[1], 0:2])))
+                c2 = kpt_right_hand[k[1], 2]
+                print('** {}, {}, {}, {} **'.format(pt1, c1, pt2, c2))
+                if c1 == 0.0 or c2 == 0.0:
+                    continue
+                color = tuple(list(map(int, hand_colors[q[0]])))
+                img = cv2.line(img, pt1, pt2, color, thickness=4)
     if not os.path.exists('results'):
         os.makedirs('results')
     # 保存图片
