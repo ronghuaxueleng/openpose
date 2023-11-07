@@ -37,6 +37,7 @@ if __name__ == '__main__':
                 body['Y'][index] = row['Y']
         with open(full_body_path) as f:
             data = json.load(f)
+            data['people'][0]['pose_keypoints_2d'] = []
             for index, row in body.iterrows():
                 data['people'][0]['pose_keypoints_2d'].append(row['X'])
                 data['people'][0]['pose_keypoints_2d'].append(row['Y'])
