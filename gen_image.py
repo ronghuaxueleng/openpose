@@ -52,7 +52,7 @@ hand_colors = [(100., 100., 100.),
 
 
 def handle_json(dir_path, filename):
-    jsonfile = os.path.join(dir_path, filename)
+    jsonfile = os.path.join(dir_path, filename + '.json')
     print('hand json {}'.format(jsonfile))
     with open(jsonfile, 'r') as f:
         data = json.load(f)
@@ -108,6 +108,6 @@ if __name__ == '__main__':
     json_dir_list = os.listdir(root_path)
     for json_dir in json_dir_list:
         sub_dir_path = os.path.join(root_path, json_dir)
-        handle_json(sub_dir_path, 'face.json')
-        handle_json(sub_dir_path, 'full_body.json')
-        handle_json(sub_dir_path, 'full_body_fix.json')
+        handle_json(sub_dir_path, 'face')
+        handle_json(sub_dir_path, 'full_body')
+        handle_json(sub_dir_path, 'full_body_fix')
