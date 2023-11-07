@@ -1,10 +1,9 @@
-import argparse
 import json
 import os
 import cv2
 import numpy as np
 
-# ¹Ç÷À¹Ø¼üµãÁ¬½Ó¶Ô
+# éª¨éª¼å…³é”®ç‚¹è¿æ¥å¯¹
 pose_pairs = {
     25: [[0, 1], [0, 15], [0, 16], [15, 17], [16, 18],
          [1, 2], [1, 5], [1, 8], [2, 3], [3, 4], [5, 6],
@@ -17,7 +16,7 @@ pose_pairs = {
          [2, 17], [5, 16]]
 }
 
-# »æÖÆÓÃµÄÑÕÉ«
+# ç»˜åˆ¶ç”¨çš„é¢œè‰²
 pose_colors = {
     25: [(255., 0., 85.), (255., 0., 0.), (255., 85., 0.), (255., 170., 0.),
          (255., 255., 0.), (170., 255., 0.), (85., 255., 0.), (0., 255., 0.),
@@ -33,7 +32,7 @@ pose_colors = {
          [255,0,0],   [200,200,0],   [0,0,0]]
 }
 
-# ÊÖ²¿¹Ø¼üµãÁ¬½Ó¶Ô
+# æ‰‹éƒ¨å…³é”®ç‚¹è¿æ¥å¯¹
 hand_pairs = [[0, 1], [0, 5], [0, 9], [0, 13], [0, 17],
               [1, 2],
               [2, 3],
@@ -56,7 +55,7 @@ def handle_json(jsonfile):
     print('hand json {}'.format(jsonfile))
     with open(jsonfile, 'r') as f:
         data = json.load(f)
-    # ´¿ºÚÉ«±³¾°
+    # çº¯é»‘è‰²èƒŒæ™¯
     img = cv2.imread('black.jpg')
     for d in data['people']:
         kpt = np.array(d['pose_keypoints_2d']).reshape((25, 3))
@@ -99,7 +98,7 @@ def handle_json(jsonfile):
             img = cv2.line(img, pt1, pt2, color, thickness=4)
     if not os.path.exists('results'):
         os.makedirs('results')
-    # ±£´æÍ¼Æ¬
+    # ä¿å­˜å›¾ç‰‡
     cv2.imwrite('results/{}.jpg'.format(jsonfile.split("\\")[-1][0:-5]), img)
 
 
