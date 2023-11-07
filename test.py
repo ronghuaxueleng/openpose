@@ -1,4 +1,6 @@
 import json
+import os
+
 import pandas as pd
 import numpy as np
 import glob
@@ -13,15 +15,6 @@ idnex_map = {
 }
 
 
-def getFileName(path):
-    filelist = glob.glob(path + "/*")
-    return filelist
-
-
-def getSpecificData(filelist):
-    for i in range(len(filelist)):
-        getOneSpecificData(filelist[i])
-
 
 def getOneSpecificData(json_path):
     with open(json_path) as f:
@@ -32,11 +25,10 @@ def getOneSpecificData(json_path):
         df.to_csv('output.csv')
 
 
-def main():
-    # filelist = getFileName(input("输入JSON目录路径:　"))
-    # getSpecificData(filelist)
-    getOneSpecificData('full_body1.json')
-
-
 if __name__ == '__main__':
-    main()
+    # getOneSpecificData('jsons/face1/full_body.json')
+    # getOneSpecificData('jsons/face1/face.json')
+    root_path = 'jsons'
+    json_dir_list = os.listdir(root_path)
+    for json_dir in json_dir_list:
+        print(json_dir)
