@@ -12,19 +12,23 @@ def getFileName(path):
 
 def getSpecificData(filelist):
     for i in range(len(filelist)):
-        with open(filelist[i]) as f:
-            data = json.load(f)
-            data = np.array(data['people'][0]['pose_keypoints_2d']).reshape(-1, 3)
+        getOneSpecificData(filelist[i])
+
+
+def getOneSpecificData(json_path):
+    with open(json_path) as f:
+        data = json.load(f)
+        data = np.array(data['people'][0]['pose_keypoints_2d']).reshape(-1, 3)
         df = pd.DataFrame(data, columns=['X', 'Y', 'P'],
                           index=["Nose", "Neck", "RShoulder", "RElbow", "RWrist", "LShoulder", "LElbow", "LWrist",
                                  "MidHip", "RHip", \
                                  "RKnee", "RAnkle", "LHip", "LKnee", "LAnkle", "REye", "LEye", "REar", "LEar",
                                  "LBigToe", "LSmallToe", "LHeel", "RBigToe", "RSmallToe", "RHeel"])
 
-        # ×Ô·Ö¤Î±ØÒª¤Ê¥Ç©`¥¿¤òÈ¡¤ê³ö¤¹
-        writeCSV([float(df.at["RElbow", "X"]), float(df.at["RElbow", "Y"]), float(df.at["RWrist", "X"]),
-                  float(df.at["RWrist", "Y"]), float(df.at["LElbow", "X"]) \
-                     , float(df.at["LElbow", "Y"]), float(df.at["LWrist", "X"]), float(df.at["LWrist", "Y"])])
+    # æ£€ç´¢è‡ªå·±éœ€è¦çš„æ•°æ®
+    writeCSV([float(df.at["RElbow", "X"]), float(df.at["RElbow", "Y"]), float(df.at["RWrist", "X"]),
+              float(df.at["RWrist", "Y"]), float(df.at["LElbow", "X"]) \
+                 , float(df.at["LElbow", "Y"]), float(df.at["LWrist", "X"]), float(df.at["LWrist", "Y"])])
 
 
 def writeCSV(data):
@@ -34,13 +38,14 @@ def writeCSV(data):
 
 
 def main():
-    filelist = getFileName(input("JSON¤Î¥Ç¥£¥ì¥¯¥È¥ê¤Î¥Ñ¥¹¤òÈëÁ¦:¡¡"))
+    # filelist = getFileName(input("è¾“å…¥JSONç›®å½•è·¯å¾„:ã€€"))
     with open('output.csv', 'w') as f:
         writer = csv.writer(f, lineterminator='\n')
-        # ×Ô·Ö¤Î±ØÒª¤Ê¥Ç©`¥¿¤ÎÁĞ¤ÎÃûÇ°¤òÓÃÒâ¡£ÉÏ¤Î¥Ç©`¥¿¤ÈÍ¬¤¸¤À¤±¤ÎÁĞÊı¤ò“B¤¨¤ë¡£
+        # å‡†å¤‡è‡ªå·±éœ€è¦çš„æ•°æ®åˆ—çš„åç§°ã€‚ä¸ä¸Šé¢çš„æ•°æ®ç›¸åŒçš„åˆ—æ•°å¯¹é½ã€‚
         writer.writerow(
             ["RElbow_x", "RElbow_y", "RWrist_x", "RWrist_y", "LElbow_x", "LElbow_y", "LWrist_x", "LWrist_y"])
-    getSpecificData(filelist)
+    # getSpecificData(filelist)
+    getOneSpecificData('full_body1.json')
 
 
 if __name__ == '__main__':
