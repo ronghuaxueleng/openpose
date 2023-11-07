@@ -4,6 +4,15 @@ import numpy as np
 import glob
 import csv
 
+idnex_map = {
+    25: ["Nose", "Neck", "RShoulder", "RElbow", "RWrist", "LShoulder", "LElbow", "LWrist",
+         "MidHip", "RHip",
+         "RKnee", "RAnkle", "LHip", "LKnee", "LAnkle", "REye", "LEye", "REar", "LEar",
+         "LBigToe", "LSmallToe", "LHeel", "RBigToe", "RSmallToe", "RHeel"],
+    18: ["Nose", "Neck", "RShoulder", "RElbow", "RWrist", "LShoulder", "LElbow", "LWrist", "RHip",
+         "RKnee", "RAnkle", "LHip", "LKnee", "LAnkle", "REye", "LEye", "REar", "LEar"]
+}
+
 
 def getFileName(path):
     filelist = glob.glob(path + "/*")
@@ -20,14 +29,11 @@ def getOneSpecificData(json_path):
         data = json.load(f)
         data = np.array(data['people'][0]['pose_keypoints_2d']).reshape(-1, 3)
         df = pd.DataFrame(data, columns=['X', 'Y', 'P'],
-                          index=["Nose", "Neck", "RShoulder", "RElbow", "RWrist", "LShoulder", "LElbow", "LWrist",
-                                 "MidHip", "RHip", \
-                                 "RKnee", "RAnkle", "LHip", "LKnee", "LAnkle", "REye", "LEye", "REar", "LEar",
-                                 "LBigToe", "LSmallToe", "LHeel", "RBigToe", "RSmallToe", "RHeel"])
+                          index=idnex_map[len(data)])
 
     # 检索自己需要的数据
     writeCSV([float(df.at["RElbow", "X"]), float(df.at["RElbow", "Y"]), float(df.at["RWrist", "X"]),
-              float(df.at["RWrist", "Y"]), float(df.at["LElbow", "X"]) \
+              float(df.at["RWrist", "Y"]), float(df.at["LElbow", "X"])
                  , float(df.at["LElbow", "Y"]), float(df.at["LWrist", "X"]), float(df.at["LWrist", "Y"])])
 
 
