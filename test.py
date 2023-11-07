@@ -20,7 +20,6 @@ def getOneSpecificData(json_path):
         data = np.array(data['people'][0]['pose_keypoints_2d']).reshape(-1, 3)
         return pd.DataFrame(data, columns=['X', 'Y', 'P'],
                           index=idnex_map[len(data)])
-        # df.to_csv('output.csv')
 
 
 if __name__ == '__main__':
@@ -31,4 +30,8 @@ if __name__ == '__main__':
         full_body_path = os.path.join(root_path, json_dir, 'full_body.json')
         face = getOneSpecificData(face_path)
         body = getOneSpecificData(full_body_path)
+        for index, row in face.iterrows():
+            if row['X'] != 0.0 and row['Y'] != 0.0 and row['P'] != 0.0:
+                body['X'][index] = row['X']
+                body['Y'][index] = row['Y']
         print()
