@@ -97,8 +97,6 @@ def handle_json(dir_path, filename):
                     continue
                 color = tuple(list(map(int, hand_colors[q[0]])))
                 img = cv2.line(img, pt1, pt2, color, thickness=4)
-    if not os.path.exists('results'):
-        os.makedirs('results')
     # 保存图片
     cv2.imwrite('{}/{}.jpg'.format(dir_path, filename), img)
 
